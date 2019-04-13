@@ -16,6 +16,12 @@ import {
 import styles from './styles';
 
 export default class Welcome extends Component {
+  static propTypes = {
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func,
+    }).isRequired,
+  };
+
   static navigationOptions = {
     header: null,
   };
@@ -27,37 +33,38 @@ export default class Welcome extends Component {
   };
 
   state = {
-    username: '',
+    cpf: '',
     loading: false,
     errorMessage: null,
   }
 
-  checkUserExists = async (username) => {
-    const user = await api.get(`/users/${username}`);
+  checkUserExists = async (cpf) => {
+    const user = await api.get(`/user/${cpf}`);
 
     return user;
   };
 
-  saveUser = async (username) => {
-    await AsyncStorage.setItem('@appHavanClient:username', username);
+  saveUser = async (user) => {
+    await AsyncStorage.setItem('@appHavanClient:user', user.request._response);
+    console.tron.log(user);
   };
 
   signIn = async () => {
-    const { username } = this.state;
+    const { cpf } = this.state;
 
-    if (username.length === 0) return;
+    if (cpf.length === 0) return;
 
     this.setState({ loading: true });
 
     try {
-      await this.checkUserExists(username);
+      const user = await this.checkUserExists(cpf);
 
-      await this.saveUser(username);
+      await this.saveUser(user);
 
       const resetAction = NavigationActions.reset({
         index: 0,
         actions: [
-          NavigationActions.navigate({ routeName: 'User' }),
+          NavigationActions.navigate({ routeName: 'Home' }),
         ],
       });
       this.props.navigation.dispatch(resetAction);
@@ -65,6 +72,10 @@ export default class Welcome extends Component {
       this.setState({ loading: false, errorMessage: 'Usuário não existe.' });
     }
   };
+
+  registerNewUser = () => {
+    this.props.navigation.navigate('Register');
+  }
 
   render() {
     return (
@@ -90,8 +101,10 @@ export default class Welcome extends Component {
             autoCorrect={false}
             placeholder="Digite seu CPF"
             underlineColorAndroid="rgba(0, 0, 0, 0)"
-            value={this.state.username}
-            onChangeText={username => this.setState({ username })}
+            value={this.state.cpf}
+            onChangeText={(formatted, extracted) => {
+              this.setState({ cpf: extracted });
+            }}
             mask={"[000].[000].[000]-[00]"}
           />
 
@@ -103,11 +116,10 @@ export default class Welcome extends Component {
           </TouchableOpacity>
 
           <Text style={styles.error}>Não é cadastrado?</Text>
-          <TouchableOpacity style={styles.button} onPress={this.signIn}>
-            { this.state.loading
-              ? <ActivityIndicator size="small" color="#FFF" />
-              : <Text style={styles.buttonText}>Novo Cadastro</Text>
-            }
+          <TouchableOpacity style={styles.button} onPress={this.registerNewUser}>
+              <Text style={styles.buttonText}>
+                Novo Cadastro
+              </Text>
           </TouchableOpacity>
         </View>
       </View>

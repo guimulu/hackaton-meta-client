@@ -2,35 +2,17 @@ import React from 'react';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import HeaderRight from 'components/HeaderRight';
 import Welcome from 'pages/welcome';
-import Profile from 'pages/profile';
+import Home from 'pages/home';
 import Register from 'pages/register';
 
-import { metrics, colors } from 'styles';
+import { metrics } from 'styles';
 
-const createNavigator = (isLogged = false) => StackNavigator({
+const createNavigator = () => StackNavigator({
   Welcome: { screen: Welcome },
   Register: { screen: Register },
-  User: {
-    screen: TabNavigator({
-      Profile: { screen: Profile },
-    }, {
-      tabBarPosition: 'bottom',
-      tabBarOptions: {
-        showIcon: true,
-        showLabel: false,
-        activeTintColor: colors.white,
-        inactiveTintColor: colors.whiteTransparent,
-        style: {
-          backgroundColor: colors.secundary,
-        },
-        indicatorStyle: {
-          backgroundColor: colors.regular,
-        },
-      },
-    }),
-  },
+  Home: { screen: Home },
 }, {
-  initialRouteName: isLogged ? 'User' : 'Welcome',
+  initialRouteName: 'Welcome',
   navigationOptions: ({ navigation }) => ({
     headerStyle: {
       paddingHorizontal: metrics.basePadding,

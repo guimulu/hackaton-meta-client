@@ -13,14 +13,14 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     color: colors.white,
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
   },
 
   text: {
     textAlign: 'center',
     marginTop: metrics.baseMargin,
-    fontSize: 14,
+    fontSize: 20,
     color: colors.light,
     lineHeight: 21,
   },
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     borderRadius: metrics.baseRadius,
     height: 44,
     paddingHorizontal: metrics.basePadding,
+    marginBottom: metrics.basePadding,
   },
 
   button: {
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.white,
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 20,
   },
 
   error: {

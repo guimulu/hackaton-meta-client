@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     borderRadius: metrics.baseRadius,
     height: 44,
     paddingHorizontal: metrics.basePadding,
+    marginBottom: metrics.basePadding,
   },
 
   button: {
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.white,
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 24,
   },
 
   error: {

@@ -15,10 +15,6 @@ import {
 import styles from './styles';
 
 export default class Register extends Component {
-  static navigationOptions = {
-    header: 'Cadastro',
-  };
-
   static propTypes = {
     navigation: PropTypes.shape({
       dispatch: PropTypes.func,
@@ -26,10 +22,10 @@ export default class Register extends Component {
   };
 
   state = {
-    username: '',
+    name: '',
     email: '',
     cpf: '',
-    phoneNumber: '',
+    phone_number: '',
     loading: false,
     errorMessage: null,
   }
@@ -37,25 +33,27 @@ export default class Register extends Component {
   saveUser = async () => {
     const {
       cpf,
-      username,
-      phoneNumber,
+      name,
+      phone_number,
       email,
     } = this.state;
-    await api.post('/user', {
-      username: 'Tobias' || username,
-      email: 'tobias@irriga.global' || email,
-      cpf: '213.321.643-45' || cpf,
-      phoneNumber: '(55) 9 1233 3124' || phoneNumber,
+
+    api.post('/user', {
+      name: name,
+      email: email,
+      cpf: cpf,
+      phone_number: phone_number,
     }).then((response) => {
       console.log(response);
+      this.goBack();
     }).catch((error) => {
       console.log(error);
     });
   };
 
   validForm = async () => {
-    const { cpf, username, phoneNumber } = this.state;
-    if (cpf && username && phoneNumber) {
+    const { cpf, name, phone_number } = this.state;
+    if (cpf && name && phone_number) {
       this.setState({ loading: true });
       await this.saveUser();
       this.setState({ loading: false });
@@ -68,7 +66,7 @@ export default class Register extends Component {
     const resetAction = NavigationActions.reset({
       index: 0,
       actions: [
-        NavigationActions.navigate({ routeName: 'User' }),
+        NavigationActions.navigate({ routeName: 'Welcome' }),
       ],
     });
     this.props.navigation.dispatch(resetAction);
@@ -79,6 +77,10 @@ export default class Register extends Component {
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
 
+        <Text style={styles.title}>
+          Realize seu Cadastro
+        </Text>
+
         <View style={styles.form}>
           <TextInputMask
             style={styles.input}
@@ -86,8 +88,8 @@ export default class Register extends Component {
             autoCorrect={false}
             placeholder="Digite seu Nome"
             underlineColorAndroid="rgba(0, 0, 0, 0)"
-            value={this.state.username}
-            onChangeText={username => this.setState({ username })}
+            value={this.state.name}
+            onChangeText={name => this.setState({ name })}
           />
 
           <TextInputMask
@@ -97,7 +99,9 @@ export default class Register extends Component {
             placeholder="Digite seu CPF"
             underlineColorAndroid="rgba(0, 0, 0, 0)"
             value={this.state.cpf}
-            onChangeText={cpf => this.setState({ cpf })}
+            onChangeText={(formatted, extracted) => {
+              this.setState({ cpf: extracted });
+            }}
             mask={"[000].[000].[000]-[00]"}
           />
 
@@ -107,8 +111,8 @@ export default class Register extends Component {
             autoCorrect={false}
             placeholder="Digite seu número de telefone"
             underlineColorAndroid="rgba(0, 0, 0, 0)"
-            value={this.state.phoneNumber}
-            onChangeText={phoneNumber => this.setState({ phoneNumber })}
+            value={this.state.phone_number}
+            onChangeText={phone_number => this.setState({ phone_number })}
             mask={"([00]) [0] [0000]-[0000]"}
           />
 
@@ -118,8 +122,8 @@ export default class Register extends Component {
             autoCorrect={false}
             placeholder="Digite seu e-mail"
             underlineColorAndroid="rgba(0, 0, 0, 0)"
-            value={this.state.username}
-            onChangeText={username => this.setState({ username })}
+            value={this.state.email}
+            onChangeText={email => this.setState({ email })}
           />
 
           <TouchableOpacity style={styles.button} onPress={this.validForm}>
