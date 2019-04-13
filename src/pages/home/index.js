@@ -70,7 +70,7 @@ export default class Home extends Component {
     api.get(`/coupon/${this.state.cupom}`).then((response) => {
       Alert.alert(
         'Parabéns!',
-        `Você resgatou com sucesso ${this.state.cupom} H-Coins!`,
+        `Você resgatou com sucesso o cupom ${this.state.cupom}`,
         [
           { text: 'OK', onPress: () => { this.setState({ cupom: '' }); this.getPoints(); } },
         ],
