@@ -137,7 +137,6 @@ export default class Home extends Component {
             underlineColorAndroid="rgba(0, 0, 0, 0)"
             value={this.state.cupom}
             onChangeText={cupom => this.setState({ cupom: cupom.toUpperCase() })}
-            mask={"[AAAA00]"}
           />
 
           <TouchableOpacity style={styles.button} onPress={this.validateCoupon}>
