@@ -25,8 +25,18 @@ const styles = StyleSheet.create({
     lineHeight: 21,
   },
 
+
+  text2: {
+    textAlign: 'center',
+    marginTop: metrics.baseMargin + 20,
+    fontSize: 20,
+    color: colors.light,
+    lineHeight: 21,
+  },
+
   form: {
     marginTop: metrics.baseMargin * 2,
+    alignItems: 'center',
   },
 
   input: {
@@ -34,6 +44,7 @@ const styles = StyleSheet.create({
     borderRadius: metrics.baseRadius,
     height: 44,
     paddingHorizontal: metrics.basePadding,
+    width: 420,
   },
 
   button: {
@@ -43,6 +54,7 @@ const styles = StyleSheet.create({
     marginTop: metrics.baseMargin,
     justifyContent: 'center',
     alignItems: 'center',
+    width: 170,
   },
 
   buttonText: {

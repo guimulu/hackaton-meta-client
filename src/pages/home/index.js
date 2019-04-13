@@ -6,11 +6,11 @@ import TextInputMask from 'react-native-text-input-mask';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StatusBar,
   ActivityIndicator,
   AsyncStorage,
+  Alert,
 } from 'react-native';
 
 import styles from './styles';
@@ -31,13 +31,20 @@ export default class Home extends Component {
     loading: false,
     points: '',
     cupom: '',
+    coin: '',
   }
 
   async componentDidMount() {
     const user = await AsyncStorage.getItem('@appHavanClient:user');
     this.setState({ user: JSON.parse(user) });
-    console.tron.log(this.state.user[0].name);
+    await this.getPoints();
   }
+
+  getPoints = async () => {
+    const points = await api.get(`/point/${this.state.user[0].cpf}`);
+    console.tron.log(points);
+    this.setState({ coin: points.data[0].current_points });
+  };
 
   registerPoints = () => {
     const { points, user} = this.state;
@@ -46,9 +53,36 @@ export default class Home extends Component {
       points: points,
     }).then((response) => {
       console.log(response);
-      this.goBack();
+      this.getPoints();
+      Alert.alert(
+        'Parabéns!',
+        `Você acaba de ganhar ${this.state.points} H-Coins!`,
+        [
+          { text: 'OK', onPress: () => { this.setState({ points: '' }); } },
+        ],
+      );
     }).catch((error) => {
       console.log(error);
+    });
+  };
+
+  validateCoupon = async () => {
+    api.get(`/coupon/${this.state.cupom}`).then((response) => {
+      Alert.alert(
+        'Parabéns!',
+        `Você resgatou com sucesso ${this.state.cupom} H-Coins!`,
+        [
+          { text: 'OK', onPress: () => { this.setState({ cupom: '' }); this.getPoints(); } },
+        ],
+      );
+    }).catch((error) => {
+      Alert.alert(
+        'Ops!',
+        'Infelizmente não foi possível realizar o resgate de H-Coins. ',
+        [
+          { text: 'OK', onPress: () => {} },
+        ],
+      );
     });
   };
 
@@ -61,9 +95,18 @@ export default class Home extends Component {
           Bem-vindo de volta {this.state.user[0].name}
         </Text>
 
-        <Text style={styles.title}>
-          Você possui N H-Coins
-        </Text>
+        { this.state.coin !== ''
+          ? (
+            <Text style={styles.titleMax}>
+              Você possui {this.state.coin} H-Coins
+            </Text>
+          )
+          : (
+            <Text style={styles.titleMax}>
+              Você ainda não possui H-Coins :(
+            </Text>
+          )
+        }
 
         <View style={styles.form}>
           <TextInputMask
@@ -97,7 +140,7 @@ export default class Home extends Component {
             mask={"[AAAA00]"}
           />
 
-          <TouchableOpacity style={styles.button} onPress={this.signIn}>
+          <TouchableOpacity style={styles.button} onPress={this.validateCoupon}>
             { this.state.loading
               ? <ActivityIndicator size="small" color="#FFF" />
               : <Text style={styles.buttonText}>Resgatar desconto</Text>

@@ -115,7 +115,7 @@ export default class Welcome extends Component {
             }
           </TouchableOpacity>
 
-          <Text style={styles.error}>Não é cadastrado?</Text>
+          <Text style={styles.text2}>Não é cadastrado?</Text>
           <TouchableOpacity style={styles.button} onPress={this.registerNewUser}>
               <Text style={styles.buttonText}>
                 Novo Cadastro

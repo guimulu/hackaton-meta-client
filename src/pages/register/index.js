@@ -15,6 +15,10 @@ import {
 import styles from './styles';
 
 export default class Register extends Component {
+  static navigationOptions = {
+    headerRight: null,
+  }
+
   static propTypes = {
     navigation: PropTypes.shape({
       dispatch: PropTypes.func,
